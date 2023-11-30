@@ -1,0 +1,361 @@
+/* 3 Text Input Field ( Text String Input ) */
+
+/* size: vertical padding, font size */
+@mixin unis-input-size($size, $offset-vertical) {
+	@if $size == 'sm' {
+		padding-bottom: calc(var(--spacing-2xs, 8px) - 1px); // 7px
+		padding-top: calc(var(--spacing-2xs, 8px) - $offset-vertical); // 7 or 8
+		@include typography('body 2');
+	} @else if $size == 'md' {
+		padding-bottom: calc(var(--spacing-xs, 12px) - 1px); // 11px
+		padding-top: calc(var(--spacing-xs, 12px) - $offset-vertical); // 11 or 12
+		@include typography('body 2');
+	} @else if $size == 'lg' {
+		padding-bottom: calc(var(--spacing-xs, 12px) - 1px); // 11px
+		padding-top: calc(var(--spacing-xs, 12px) - $offset-vertical); // 11 or 12
+		@include typography('body 1');
+	} @else {
+		@warn "Invalid size value: #{$size}. Expected 'sm', 'md', or 'lg'.";
+	}
+}
+/* style: border, bg, images position */
+@mixin unis-input-style($style, $offset-horz) {
+	// Disable clicking
+	// Doesn't disable tabbing though
+	&#{$disabled},
+	&#{$readonly} {
+		pointer-events: none;
+	}
+	// Border ( Color )
+	input,
+	select {
+		@apply border-neutral-rest;
+		border-style: solid;
+	}
+	&#{$disabled} input,
+	&#{$disabled} select,
+	&#{$readonly} input,
+	&#{$readonly} select {
+		@apply border-cta-disabled;
+	}
+	&#{$success} input,
+	&#{$success} select {
+		@apply border-cta-success;
+	}
+	&#{$error} input,
+	&#{$error} select {
+		@apply border-cta-error;
+	}
+
+	@if $style == 'underlined' {
+		// Underlined Only:
+		> input,
+		> select {
+			border-bottom-width: 1px;
+			border-radius: 0;
+			&:first-child {
+				padding-left: 1px;
+			}
+			&:not(:first-child) {
+				padding-left: calc($offset-horz + var(--spacing-2xs, 8px));
+			}
+			&:last-child {
+				padding-right: 1px;
+			}
+			&:not(:last-child) {
+				padding-right: $offset-horz + 0px;
+			}
+		}
+		@each $i in $icon {
+			> #{$i} {
+				&:first-child {
+					left: 0px;
+				}
+				&:last-child {
+					right: 0px;
+				}
+			}
+		}
+	} @else {
+		// Filled and Outlined Only:
+		border-radius: var(--rounded-sm, 8px);
+		> input,
+		> select {
+			border-width: 1px;
+			border-radius: var(--rounded-sm, 8px);
+			&:first-child {
+				padding-left: var(--spacing-xs, 12px);
+			}
+			&:not(:first-child) {
+				padding-left: calc(
+					$offset-horz + var(--spacing-xs, 12px) + var(--spacing-2xs, 8px)
+				);
+			}
+			&:last-child {
+				padding-right: var(--spacing-2xs, 8px);
+			}
+			&:not(:last-child) {
+				padding-right: calc($offset-horz + var(--spacing-2xs, 8px));
+			}
+		}
+		svg:first-child {
+			left: var(--spacing-xs, 12px);
+		}
+		svg {
+			right: var(--spacing-2xs, 8px);
+		}
+		@each $i in $icon {
+			> #{$i} {
+				&:first-child {
+					left: var(--spacing-xs, 12px);
+				}
+				&:last-child {
+					right: var(--spacing-2xs, 8px);
+				}
+			}
+		}
+	}
+	@if $style == 'filled' {
+		// Filled:
+		> input,
+		> select {
+			@apply bg-primary-rest;
+			@include hovered {
+				@apply bg-primary-hover;
+			}
+		}
+		&#{$disabled} > input,
+		&#{$disabled} > select {
+			@apply bg-primary-hover;
+		}
+	} @else if $style == 'outlined' {
+		// Outlined:
+		> input,
+		> select {
+			background-color: transparent;
+			@include hovered {
+				@apply border-neutral-hover;
+			}
+		}
+	} @else if $style == 'underlined' {
+		// Underlined:
+		> input,
+		> select {
+			background-color: transparent;
+			@include hovered {
+				@apply border-neutral-hover;
+			}
+		}
+	} @else {
+		@warn "Invalid style value: #{$style}. Expected 'outlined', 'underlined', or 'filled'.";
+	}
+}
+
+@mixin unis-input-base {
+	position: relative;
+
+	@each $i in $icon {
+		> #{$i} {
+			@include center-vertically;
+			position: absolute;
+			&:first-child {
+				pointer-events: none;
+			}
+			&:last-child {
+				cursor: pointer;
+			}
+		}
+	}
+	max-width: 100%;
+	min-width: 100%;
+	> input {
+		max-width: 100%;
+		min-width: 100%;
+		@include on-focus-outline;
+	}
+
+	// Icon ( Font & Color )
+	@each $i in $icon {
+		> #{$i} {
+			&:first-child {
+				@apply text-content-medium;
+			}
+			&:last-child {
+				@apply text-content-dark;
+			}
+		}
+		&#{$disabled} > #{$i},
+		&#{$readonly} > #{$i} {
+			@apply text-cta-disabled;
+		}
+	}
+	// User Input ( Color )
+	input {
+		@apply text-content-darkest;
+	}
+	&#{$disabled} input {
+		@apply text-cta-disabled;
+	}
+	// Placeholder ( Font & Color )
+	&:not(.unis-placeholder-label) {
+		input::placeholder {
+			@apply text-content-medium;
+		}
+		&#{$readonly} > input::placeholder {
+			@apply text-content-darkest;
+		}
+		&#{$disabled} > input::placeholder {
+			@apply text-cta-disabled;
+		}
+	}
+	// Inline Label ( Font & Color & Typography )
+	&.unis-placeholder-label {
+		input::placeholder {
+			@apply text-content-medium;
+		}
+		&#{$readonly} > input::placeholder {
+			@apply text-content-darkest;
+		}
+		&#{$disabled} > input::placeholder {
+			@apply text-cta-disabled;
+		}
+		&#{$success} > input::placeholder {
+			@apply text-cta-success;
+		}
+		&#{$error} > input::placeholder {
+			@apply text-cta-error;
+		}
+		input:focus::placeholder {
+			opacity: 0;
+			color: transparent;
+		}
+	}
+}
+
+/*
+		Loop defines all 9 variations:
+		 .unis-input-filled-sm
+		 .unis-input-filled-md
+		 .unis-input-filled-lg
+		 .unis-input-underlined-sm
+		 .unis-input-underlined-md
+		 .unis-input-underlined-lg
+		 .unis-input-outlined-sm
+		 .unis-input-outlined-md
+		 .unis-input-outlined-lg
+	  */
+$styles: filled, underlined, outlined;
+$sizes: sm, md, lg;
+@each $style in $styles {
+	@each $size in $sizes {
+		fieldset.unis-input-#{$style}-#{$size} {
+			$offset-horz: if($size == 'lg', 20px, 16px); // icon width
+			$offset-vertical: if($style == 'underlined', 0px, 1px); // top border width
+			@include unis-input-base;
+			@include unis-input-style($style, $offset-horz);
+			> input {
+				@include unis-input-size($size, $offset-vertical);
+			}
+		}
+	}
+}
+
+// .unis-input-filled-lg {
+//   @include unis-input-size('lg', 'filled');
+//   @include unis-input-style('filled');
+//   @include unis-input-base;
+// }
+// .unis-input-filled-md {
+//   @include unis-input-size('md', 'filled');
+//   @include unis-input-style('filled');
+//   @include unis-input-base;
+// }
+// .unis-input-filled-lg {
+//   @include unis-input-size('lg', 'filled');
+//   @include unis-input-style('filled');
+//   @include unis-input-base;
+// }
+// .unis-input-underlined-sm {
+//   @include unis-input-size('sm', 'underlined');
+//   @include unis-input-style('underlined');
+//   @include unis-input-base;
+// }
+// .unis-input-underlined-md {
+//   @include unis-input-size('md', 'underlined');
+//   @include unis-input-style('underlined');
+//   @include unis-input-base;
+// }
+// .unis-input-underlined-lg {
+//   @include unis-input-size('lg', 'underlined');
+//   @include unis-input-style('underlined');
+//   @include unis-input-base;
+// }
+// .unis-input-outlined-sm {
+//   @include unis-input-size('sm', 'outlined');
+//   @include unis-input-style('outlined');
+//   @include unis-input-base;
+// }
+// .unis-input-outlined-md {
+//   @include unis-input-size('md', 'outlined');
+//   @include unis-input-style('outlined');
+//   @include unis-input-base;
+// }
+// .unis-input-outlined-lg {
+//   @include unis-input-size('lg', 'outlined');
+//   @include unis-input-style('outlined');
+//   @include unis-input-base;
+// }
+
+/*
+		/* clears the ‘X’ from Internet Explorer
+		input[type=search]::-ms-clear { display: none; width : 0; height: 0; }
+		input[type=search]::-ms-reveal { display: none; width : 0; height: 0; }
+		/* clears the ‘X’ from Chrome
+		input[type="search"]::-webkit-search-decoration,
+		input[type="search"]::-webkit-search-cancel-button,
+		input[type="search"]::-webkit-search-results-button,
+		input[type="search"]::-webkit-search-results-decoration { display: none; }
+		*/
+//}
+
+//   #{$input-container}[data-label]:not(:focus-within) > input::placeholder {
+//     // hide placeholder when Inline Label shown
+//     color: transparent;
+//     display: none;
+//   }
+//   #{$input-container}:not(:focus-within)::before {
+//     content: none;
+//     position: absolute;
+//     left: 50px; /* Adjust as needed */
+//     @include center-vertically;
+//     pointer-events: none;
+//   }
+//   #{$input-container}:not(:focus-within):has(> input:placeholder-shown)::before {
+//     /*
+//           WARNING using the ":has()" selector - support coming in firefox 119, not yet out!!!
+
+//           As Work Around: Could use Javascript:
+
+//            With Javascript add input/focus/blur event listeners
+//            to determine when to set a html data property
+//            and have a scss that woulld show this if that property set
+
+//           if (input.value === "" && document.activeElement !== input) {
+//               container.dataset.showAfter = "true";
+//           } else {
+//               container.dataset.showAfter = "false";
+//           }
+
+//            #{$input-container}[data-show-after="true"]::before {
+//               content: attr(data-utensil);
+//            }
+//         */
+//     content: attr(data-label);
+//   }
+//   // User Input ( Font & Color )
+//   #{$input-container} > input {
+//     @apply text-content-darkest;
+//   }
+//   #{$input-container}#{$disabled} > input {
+//     @apply text-cta-disabled;
+//   }

@@ -1,0 +1,106 @@
+// - On Click Dropdown - //
+// Hide/Show based on 'open' <details> attribute
+// Keyboard: Open with key: Spacebar / Enter
+@mixin click-unis-dropdown {
+	//   // remove default triangle icon
+	//   summary::-webkit-details-marker {
+	//     display: none;
+	//   }
+	//   // remove default triangle icon
+	//   summary {
+	//     list-style-type: none;
+	//   }
+	.dropdown-menu {
+		z-index: 60;
+	}
+	.unis-overlay {
+		inset: 0;
+		position: fixed;
+		z-index: 50;
+	}
+}
+
+// - On Hover Dropdown - //
+// Hide/Show based on :hover
+// Keyboard: Open With key: Tab
+// Also if clicked on it, it stays open ( :focus )
+@mixin hover-unis-dropdown {
+	&:hover,
+	&:focus-within {
+		& .dropdown-menu:not(.hidden) {
+			display: block;
+		}
+	}
+}
+
+$dropdownshown: hover, click, select;
+
+// - Both: On Hover & On Click Dropdown - //
+@each $show in $dropdownshown {
+	@each $style in $styles {
+		@each $size in $sizes {
+			// TODO add fieldset...
+			.unis-dropdown-#{$show}-#{$style}-#{$size} {
+				$offset-horz: if($size == 'lg', 20px, 16px); // icon width
+				$offset-vertical: if($style == 'underlined', 0px, 1px); // top border width
+				position: relative;
+				display: inline-block;
+
+				// nothing else should be taking up space except the input/select
+				// not the images
+				// not the dropdown menu it's self.
+				> *:not(input):not(select) {
+					position: absolute;
+				}
+
+				@each $i in $icon {
+					> #{$i} {
+						@include center-vertically;
+						// flip icon
+						&[data-open='true'] {
+							> #{$i}:last-child {
+								transform: translateY(-50%) rotate(180deg);
+							}
+						}
+					}
+				}
+				@include unis-input-style($style, $offset-horz);
+				> select,
+				> input {
+					@include on-focus-outline;
+					@include unis-input-size($size, $offset-vertical);
+				}
+
+				select,
+				.dropdown-menu {
+					width: 100%;
+				}
+				.unis-overlay,
+				.dropdown-menu {
+					display: none;
+				}
+				&[data-open='true'] > .dropdown-menu,
+				&[data-open='true'] > .unis-overlay {
+					display: block;
+				}
+				.dropdown-menu {
+					z-index: 1;
+					background-color: #f9f9f9;
+
+					> div {
+						color: black;
+						padding: 12px 16px;
+						text-decoration: none;
+						display: block;
+					}
+				}
+
+				@if $show == 'click' {
+					@include click-unis-dropdown;
+				} @else if $show == 'hover' {
+					@include hover-unis-dropdown;
+				}
+			}
+		}
+	}
+}

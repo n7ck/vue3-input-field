@@ -1,0 +1,277 @@
+/* Design System Config - Start */
+
+// List Variables:
+$icon: 'svg', 'i'; // svg, i; /* define what all elements an 'icon' will be */
+
+// Single Value (Not List) Variables:
+$disabled: ':disabled[data-state="disabled"]';
+$readonly: ':disabled[data-state="readonly"]';
+$error: '[data-state="error"]';
+$success: '[data-state="success"]';
+
+/* Design System Config - End */
+
+/*
+.text-input > * {
+  @each $element in $icon-elements { &:not(#{$icon}) { padding-left: 5px; }
+  }
+}
+*/
+
+/* most the time if Figma shows 'Hovered' State... this is what it Really means: */
+@mixin hovered {
+  &:hover:where(:not(:focus):not(:disabled)) {
+    @content;
+  }
+}
+
+@mixin on-focus-outline {
+  /* Touch Screen / Keyboard / Mouse Focus */
+  :root.focus-touch & {
+    // &:not(.unis-x):focus {
+    //   outline: 2px solid var(--secondary-2); // Touch gives light outline
+    //   outline-offset: 2px;
+    // }
+  }
+  :root.focus-tab & {
+    // &:not(.unis-x):focus {
+    // 	outline: 2px solid var(--secondary-3); // Tab gives darker outline
+    // 	outline-offset: 2px;
+    // }
+  }
+  //:root.focus-click & {
+  &:not(.unis-x):focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    &:not(:active) {
+      outline: 2px solid var(--secondary-2); // Click gives outline AFTER click release
+    }
+  }
+  //}
+}
+
+@mixin center-vertically {
+  transform: translateY(-50%);
+  top: 50%;
+}
+
+/* Font Typography (Everything about the font besides: font-family and text color) */
+@mixin typography($nameCap) {
+  $name: to-lower-case($nameCap);
+  // letter-spacing: 0; // currently everything is 0 so doesn't matter
+  @if $name == 'display 1' {
+    // div
+    font-size: 57px;
+    line-height: 64px;
+    font-weight: 500;
+  } @else if $name == 'display 2' {
+    // <div>
+    font-size: 45px;
+    line-height: 52px;
+    font-weight: 500;
+  } @else if $name == 'display 3' {
+    // <div>
+    font-size: 36px;
+    line-height: 34px;
+    font-weight: 500;
+  } @else if $name == 'headline 1' {
+    // <h1>
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 500;
+  } @else if $name == 'headline 2' {
+    // <h2>
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 500;
+  } @else if $name == 'headline 3' {
+    // <h3>
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 500;
+  } @else if $name == 'title 1' {
+    // <h4>
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 500;
+  } @else if $name == 'title 2' {
+    // <h5>
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 500;
+  } @else if $name == 'title 3' {
+    // <h6>
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+  } @else if $name == 'label 1' {
+    // <span>
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 700;
+  } @else if $name == 'label 2' {
+    // <span>
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+  } @else if $name == 'label 3' {
+    // <span>
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 700;
+  } @else if $name == 'body 1' {
+    // <p>
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+  } @else if $name == 'body 2' {
+    // <p>
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+  } @else if $name == 'body 3' {
+    // <p>
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+  } @else if $name == 'caption 1' {
+    // <span> or <figcaption>
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+  } @else if $name == 'caption 2' {
+    // <span> or <figcaption>
+    font-size: 10px;
+    line-height: 14px;
+    font-weight: 500;
+  } @else if $name == 'caption 3' {
+    // <span> or <figcaption>
+    font-size: 8px;
+    line-height: 12px;
+    font-weight: 500;
+  } @else if $name == 'subtext 1' {
+    // <small>
+    font-size: 10px;
+    line-height: 12px;
+    font-weight: 400;
+  } @else if $name == 'subtext 2' {
+    // <small>
+    font-size: 9px;
+    line-height: 11px;
+    font-weight: 400;
+  } @else if $name == 'subtext 3' {
+    // <small>
+    font-size: 8px;
+    line-height: 10px;
+    font-weight: 400;
+  } @else {
+    @warn "Invalid typography value: #{$size}.";
+  }
+}
+
+$numbers123: (1, 2, 3);
+$classes: (
+  'display': $numbers123,
+  'headline': $numbers123,
+  'title': $numbers123,
+  'label': $numbers123,
+  'body': $numbers123,
+  'caption': $numbers123,
+  'subtext': $numbers123
+);
+@each $class, $numbers in $classes {
+  @each $number in $numbers {
+    .unis-#{$class}-#{$number} {
+      @include typography('#{$class} #{$number}');
+    }
+  }
+}
+
+//SVGs
+:root {
+  /**
+ * svg fill color changes ( Note: Manually need to update these fill colors )
+ * inline SVGs inside a background-image URL are not subject to the same CSS
+ * environment as the rest of your document. The SVG content is parsed as-is,
+ * and it doesn't have access to any external CSS context, including CSS variables
+ *
+ * 1 Alternative: maybe can use Font Awesome for background image?
+ * 2 Alternative: could use &::after { mask: url( < inverted svg here > ) }
+ * 3 Alternative: https://codepen.io/noahblon/post/coloring-svgs-in-css-background-images
+ */
+  @function str-replace($string, $search, $replace: '') {
+    // Convert the value to a string
+    $stringValue: $string + '';
+    $index: str-index($stringValue, $search);
+    @if $index {
+      @return str-slice($stringValue, 1, $index - 1) + $replace +
+        str-replace(str-slice($stringValue, $index + str-length($search)), $search, $replace);
+    }
+    @return $stringValue;
+  }
+  @function svg-url($color-raw, $svg-data) {
+    $color: str-replace($color-raw, '#', '%23');
+    // Replace the placeholder <color> in the SVG data with the desired color
+    $encoded: str-replace($svg-data, '<color>', $color);
+    @return url($encoded);
+  }
+
+  $checkbox-svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M7 13.4L3 9.4L4.4 8L7 10.6L13.6 4L15 5.4L7 13.4Z' fill='<color>'/%3E%3C/svg%3E";
+  $indeterminate-svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M4 10V8H14V10H4Z' fill='<color>'/%3E%3C/svg%3E";
+
+  &:not(.dark) {
+    --svg-checkbox: #{svg-url(white, $checkbox-svg)};
+    --svg-checkbox-disabled: #{svg-url(#cecece, $checkbox-svg)}; // cta-disabled = gray-200
+    --svg-indeterminate: #{svg-url(white, $indeterminate-svg)};
+    --svg-indeterminate-disabled: #{svg-url(#cecece, $indeterminate-svg)}; // cta-disabled = gray-200
+  }
+  &.dark {
+    --svg-checkbox: #{svg-url(black, $checkbox-svg)};
+    --svg-checkbox-disabled: #{svg-url(#5e5f5f, $checkbox-svg)}; // cta-disabled = gray-700
+    --svg-indeterminate: #{svg-url(black, $indeterminate-svg)};
+    --svg-indeterminate-disabled: #{svg-url(#5e5f5f, $indeterminate-svg)}; // cta-disabled = gray-700
+  }
+}
+
+.unis-field {
+  /*
+  <div class="unis-input-container>
+    < fieldset:first-child >  // -- STATE HERE ONLY --
+       ...
+          <input or class="unis-input />  // -- STYLES HERE ONLY --
+       ...
+    </ fieldset:first-child >
+    <label> Label </label> // optional
+    <span> support text </span> // optional
+  </div>
+*/
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3xs, 4px);
+  // Label ( Font & Color & Typography )
+  > label {
+    order: -1; // put on top! above input container
+    @include typography('body 2');
+    @apply text-content-darkest;
+  }
+  > fieldset:first-child#{$disabled} ~ label,
+  > fieldset:first-child#{$readonly} ~ label {
+    @apply text-content-soft;
+  }
+  // Support Text ( Font & Color & Typography )
+  > span {
+    @include typography('body 3');
+    @apply text-content-subtle;
+  }
+  > fieldset:first-child#{$success} ~ span {
+    @apply text-cta-success;
+  }
+  > fieldset:first-child#{$error} ~ span {
+    @apply text-cta-error;
+  }
+}
+
+@import '@styles/design-system/unis-btn';
+@import '@styles/design-system/unis-checkbox-and-radio';
+@import '@styles/design-system/unis-input';
+@import '@styles/design-system/unis-dropdown';

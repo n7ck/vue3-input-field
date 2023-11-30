@@ -1,0 +1,79 @@
+/* 1. Buttons */
+@layer base {
+	@mixin unis-btn-base {
+		@include on-focus-outline;
+		gap: var(--spacing-2xs, 8px);
+		padding: var(--spacing-2-xs, 8px) var(--spacing-sm, 16px);
+		@include typography('title 3'); /* font-size / line-height / font-weight */
+		border-radius: var(--radius-sm, 8px);
+		@apply transition ease-in-out; /* transition */
+		@apply inline-flex items-center justify-center; /* alignment */
+		&:disabled {
+			@apply text-cta-disabled; /* disabled: font color */
+		}
+	}
+
+	.unis-btn-filled {
+		@include unis-btn-base; /* base */
+		&:not(:disabled) {
+			@apply text-cta-achromatic; /* font color */
+			@apply bg-filled-rest  hover:bg-filled-hover   active:bg-filled-pressed; /* color changes */
+		}
+		&:disabled {
+			@apply bg-filled-disabled; /* disabled color */
+		}
+	}
+
+	.unis-btn-outlined {
+		@include unis-btn-base; /* base */
+		@apply border; /* border */
+		padding: calc(var(--spacing-2-xs, 8px) - 1px) calc(var(--spacing-sm, 16px) - 1px); /* reduce padding by 1px to account for border */
+		&:not(:disabled) {
+			@apply text-cta-rest hover:text-cta-hover active:text-cta-pressed; /* font colors */
+			@apply border-cta-rest hover:border-cta-hover active:border-cta-pressed; /* border colors */
+		}
+		&:disabled {
+			@apply border-cta-disabled; /* disabled color */
+		}
+	}
+
+	.unis-btn-tonal {
+		@include unis-btn-base; /* base */
+		&:not(:disabled) {
+			@apply text-cta-tonal; /* font color */
+			@apply bg-tonal-rest  hover:bg-tonal-hover   active:bg-tonal-pressed; /* color changes */
+		}
+		&:disabled {
+			@apply bg-tonal-disabled; /* disabled color */
+		}
+	}
+
+	.unis-btn-elevated {
+		@include unis-btn-base; /* base */
+		@apply shadow-elevation-01; /* shadow */
+		&:not(:disabled) {
+			@apply hover:shadow-elevation-02; /* shadow on hover */
+			@apply text-cta-tonal; /* font color */
+			@apply bg-tonal-rest  hover:bg-tonal-hover   active:bg-tonal-pressed; /* color changes */
+		}
+		&:disabled {
+			@apply bg-tonal-disabled; /* disabled color */
+		}
+	}
+
+	.unis-btn-text {
+		@include unis-btn-base; /* base */
+		&:not(:disabled) {
+			@apply text-cta-rest  hover:text-cta-hover  active:text-cta-pressed; /* color changes */
+		}
+	}
+
+	.unis-btn-underlined {
+		@include unis-btn-base; /* base */
+		@apply underline; /* underlined */
+		text-underline-offset: 3px; /* underlined offset */
+		&:not(:disabled) {
+			@apply text-cta-rest  hover:text-cta-hover  active:text-cta-pressed; /* color changes */
+		}
+	}
+}

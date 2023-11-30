@@ -1,0 +1,149 @@
+/* 2 Checkbox & Radio Button */
+@layer base {
+	@mixin unis-check-radio-base {
+		@include typography('body 2');
+		display: flex;
+		align-items: center;
+		user-select: none;
+		> input:not(:disabled),
+		> input:not(:disabled) + label {
+			@apply cursor-pointer;
+		}
+		/* label font color */
+		@apply text-content-darkest;
+		> input:disabled + label {
+			@apply text-content-soft;
+		}
+
+		> input {
+			@include on-focus-outline;
+			@apply appearance-none; /* hide browser default checkbox */
+			@apply p-0 align-middle;
+			@apply border-2;
+		}
+		> label {
+			padding-left: var(
+				--spacing-2xs,
+				8px
+			); // instead of gap so if click on padding it selects checkbox.
+		}
+	}
+
+	@mixin unis-checkbox-base {
+		@include unis-check-radio-base;
+
+		> input[type='checkbox'] {
+			height: 18px;
+			width: 18px;
+			&:checked,
+			&:indeterminate {
+				@apply border-none;
+				@apply bg-center bg-no-repeat; /* checkmark background image positioning */
+			}
+			// Colors
+			&:not(:disabled) {
+				&:not(:checked):not(:indeterminate) {
+					@apply border-neutral-rest;
+					@apply hover:border-neutral-hover hover:bg-secondary-hover;
+					@apply active:border-neutral-pressed active:bg-primary-rest;
+				}
+				&:checked,
+				&:indeterminate {
+					@apply bg-filled-rest;
+					@apply hover:bg-filled-hover;
+					@apply active:bg-filled-pressed;
+				}
+			}
+			&:disabled {
+				&:not(:checked):not(:indeterminate) {
+					@apply border-cta-disabled;
+				}
+				&:checked,
+				&:indeterminate {
+					@apply bg-filled-disabled;
+				}
+			}
+			//image
+			&:not(:indeterminate):checked {
+				&:not(:disabled) {
+					background-image: var(--svg-checkbox);
+				}
+				&:disabled {
+					background-image: var(--svg-checkbox-disabled);
+				}
+			}
+			&:indeterminate {
+				&:not(:disabled) {
+					background-image: var(--svg-indeterminate);
+				}
+				&:disabled {
+					background-image: var(--svg-indeterminate-disabled);
+				}
+			}
+		}
+	}
+
+	.unis-checkbox-standard {
+		@include unis-checkbox-base;
+	}
+
+	.unis-checkbox-thinline {
+		@include unis-checkbox-base;
+		> input[type='checkbox'] {
+			@apply h-4 w-4; // 16px instead of 18px
+			@apply ml-px; // 1px margin so still takes up 18px space
+			@apply border; // 1px thin border
+		}
+	}
+
+	.unis-checkbox-circular {
+		@include unis-checkbox-base;
+		> input[type='checkbox'] {
+			@apply rounded-full; // round
+		}
+	}
+
+	.unis-radio {
+		@include unis-check-radio-base;
+
+		> input[type='radio'] {
+			height: 20px;
+			width: 20px;
+			@apply relative;
+			@apply rounded-full;
+			&:not(:disabled) {
+				&:hover {
+					@apply ring-primary-hover ring-2;
+					@apply bg-primary-hover;
+				}
+				&:active {
+					@apply ring-primary-pressed ring-2;
+					@apply bg-primary-pressed;
+				}
+				&:checked {
+					/* dot */
+					&::before {
+						content: '';
+						@apply absolute;
+						inset: 3px;
+						@apply rounded-full;
+						@apply bg-cta-rest;
+					}
+					@apply border-cta-rest;
+				}
+			}
+			&:disabled {
+				/* dot */
+				&:checked::before {
+					content: '';
+					@apply absolute;
+					inset: 3px;
+					@apply rounded-full;
+					@apply bg-cta-disabled;
+				}
+				@apply border-cta-disabled;
+				@apply bg-transparent;
+			}
+		}
+	}
+}

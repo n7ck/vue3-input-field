@@ -1,0 +1,46 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "Figma_Variables"],
+  "compilerOptions": {
+    "verbatimModuleSyntax": true,
+    "allowJs": true,
+    "types": ["node"],
+    "ignoreDeprecations": "5.0",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"],
+      "@assets/*": ["src/assets/*"],
+      "@styles/*": ["src/styles/*"],
+      "@apis/*": ["src/app/apis/*"],
+      "@components/*": ["src/app/components/*"],
+      "@constants/*": ["src/app/constants/*"],
+      "@hooks/*": ["src/app/hooks/*"],
+      "@models/*": ["src/app/models/*"],
+      "@routers/*": ["src/app/routers/*"],
+      "@stores/*": ["src/app/stores/*"],
+      "@utils/*": ["src/app/utils/*"],
+      "@views/*": ["src/app/views/*"],
+      "@/*": ["src/app/*"]
+    },
+    "jsx": "preserve",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "noImplicitAny": false,
+    "strict": false,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
+    "sourceMap": true
+  },
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}
